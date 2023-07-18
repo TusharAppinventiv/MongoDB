@@ -1,0 +1,94 @@
+//creaing a collection
+db.createCollection("action")
+
+//////////////////////////////////////////////////
+//insertion query
+db.users.insertOne({
+  username: "Abhi",
+  email: "abhi@gmail.com",
+  Bio : "Hello there",
+  password: "password123",
+  createdAt: new Date()
+});
+/////////////////////////////////////////////////
+
+//finding a user
+db.users.find({
+    username : "Tushar"
+})
+/////////////////////////////////////////////////
+
+//inserting query
+db.action.insertOne({
+  id : "Tushar",
+  like_id : "64b614ad03cf918efbdb61a3",
+  comment_id : "64b6153303cf918efbdb61a5"
+});
+
+/////////////////////////////////////////////////
+//updating the like and comment count
+
+db.posts.updateOne(
+  { _id: ObjectId("64b581e003cf918efbdb61a2") },
+  { $inc: { likes: 1 } }
+);
+
+
+db.posts.updateOne(
+  { _id: ObjectId("64b581e003cf918efbdb61a2") },
+  { $inc: { comments: 1 } }
+);
+
+///////////////////////////////////////////////////
+//insertion query for adding like and adding a comment
+
+db.likes.insertOne({
+  user: ObjectId("64b581cb03cf918efbdb61a1"),
+  post: ObjectId("4268617261745f686579796f")
+});
+
+
+db.comments.insertOne({
+  user: ObjectId("64b581cb03cf918efbdb61a1"),
+  post: ObjectId("4268617261745f686579796f"),
+  text: "Hi there",
+  createdAt: new Date()
+});
+
+//////////////////////////////////////////////////
+//insertion for followers
+
+db.followers.insertOne({
+  follower: ObjectId("64b5800f03cf918efbdb619e"),
+  following: ObjectId("64b57fd103cf918efbdb619d")
+});
+
+
+db.following.insertOne({
+  follower: ObjectId("64b5800f03cf918efbdb619e"),
+  following: ObjectId("64b57fd103cf918efbdb619d")
+});
+//////////////////////////////////////////////////
+
+//using $push
+
+db.users.updateOne(
+  { username: 'Tushar' },
+  { $push: { posts: { caption: 'New post', image: 'www.newimage.com' } } }
+);
+///////////////////////////////////////////////////
+
+//getting the user all posts count
+
+db.users.aggregate([
+  {
+    $match: {
+      $or: [
+        { username: "Tushar" },
+        { email: "tushar@gmail.com" }
+      ]
+    }
+  }
+])
+
+////////////////////////////////////////////////////////
